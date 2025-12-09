@@ -1,17 +1,18 @@
 import express from "express";
-import dotenv from "dotenv"   ;
+import dotenv from "dotenv";
 import { sql } from "./config/db.js";
- 
+
 dotenv.config();
 
-
 const app = express();
-// //middleware
-// app.use(express.json());
-// app.use((req,res,next) =>{
-//     console.log("Hey we hit a req, the method is",req.method)
+
+// middleware
+app.use(express.json());
+// app.use((req, res, next) => {
+//     console.log("Incoming", req.method, req.path);
 //     next();
 // });
+
 const PORT = process.env.PORT || 5000;
 
 async function initDB() {
@@ -31,25 +32,47 @@ async function initDB() {
         process.exit(1); // status code 1 means failure, 0 success
     }
 }
-app.get("/", (req,res) => {
-    res.send("It is working..")
-   
-})
-
 
 app.get("/", (req, res) => {
-   res.send("It is working 123");
+    res.send("It is working..");
 });
 
-app.post("/api/transactions"    , (req, res) => {
-    //title,amount,catagorey,useid
-try {
-    const {title, amount,catagoryy,user_id} = req.body;
-    
-} catch (error) {
-    
-}
-})
+app.get("/api/transactions/:userId", async (req, res) => {
+    try {
+        const { userId } = req.params;
+
+        const transactions = await sql`
+            SELECT * FROM transactions WHERE user_id = ${userId} ORDER BY category_at DESC
+        `;
+
+        res.status(200).json(transactions);
+    } catch (error) {
+        console.log("Error fetching transactions", error);
+        res.status(500).json({ message: "internal server error" });
+    }
+});
+
+app.post("/api/transactions", async (req, res) => {
+    try {
+        const { title, amount, category, user_id } = req.body;
+
+        if (!title || !user_id || !category || amount === undefined) {
+            return res.status(400).json({ message: "All fields are required" });
+        }
+
+        const result = await sql`
+            INSERT INTO transactions (user_id, title, amount, category)
+            values (${user_id}, ${title}, ${amount}, ${category})
+            RETURNING *
+        `;
+
+        res.status(201).json(result[0]);
+    } catch (error) {
+        console.log("Error creating the trasaction", error);
+        res.status(500).json({ message: "internal server error" });
+    }
+});
+  
 
 
 
