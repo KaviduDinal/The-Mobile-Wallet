@@ -1,4 +1,2 @@
 # The-Mobile-Wallet
 
-
-
