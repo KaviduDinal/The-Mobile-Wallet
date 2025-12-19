@@ -6,3 +6,4 @@ dotenv.config();
 
 // Creates a sql connection using our db url
 export const sql = neon(process.env.DATABASE_URL);
+
