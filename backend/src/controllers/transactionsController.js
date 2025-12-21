@@ -1,10 +1,6 @@
-import express from "express";
 import { sql } from "../config/db.js";
 
-
-const router = express.Router();
-
-router.get("/:userId", async (req, res) => {
+export async function getTransactionByUserId(req, res) {
     try {
         const { userId } = req.params;
 
@@ -21,9 +17,9 @@ router.get("/:userId", async (req, res) => {
         console.log("Error fetching transactions", error);
         res.status(500).json({ message: "internal server error" });
     }
-});
+}
 
-router.post("/", async (req, res) => {
+export async function createTransaction(req, res) {
     try {
         const { title, amount, category, user_id } = req.body;
 
@@ -42,9 +38,9 @@ router.post("/", async (req, res) => {
         console.log("Error creating the trasaction", error);
         res.status(500).json({ message: "internal server error" });
     }
-});
+}
 
-router.delete("/:id", async (req, res) => {
+export async function deleteTransaction (req, res) {
     try {
         const { id } = req.params;
 
@@ -65,9 +61,9 @@ router.delete("/:id", async (req, res) => {
         console.log("Error deleting the transaction", error);
         res.status(500).json({ message: "internal server error" });
     }
-});
+}
 
-router.get("/summary/:userId", async (req, res) => {
+export async function getSummaryByUserId(req, res) {
     try {
         const { userId } = req.params;
 
@@ -94,6 +90,4 @@ router.get("/summary/:userId", async (req, res) => {
         res.status(500).json({ message: "internal server error" });
 
     }
-});
-
-export default router
+}
