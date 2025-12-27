@@ -1,5 +1,6 @@
-import { Image, Text, View } from "react-native";
+import { Image } from "expo-image";
 import { Link } from "expo-router";
+import { StyleSheet, Text, View } from "react-native";
 
 export default function Index() {
   return (
@@ -12,7 +13,7 @@ export default function Index() {
 
       }}
     >
-      <Text style={{ color: "blue" }}>Edit app/index.tsx to edit this screen.123</Text>
+      <Text style={styles.container}>Edit app/index.jsx to edit this screen.</Text>
       <Link href={"/about"}>About</Link>
       <View>
         <Text>
@@ -23,4 +24,14 @@ export default function Index() {
     </View>
   );
 }
+
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "purple",
+  },
+});
 
