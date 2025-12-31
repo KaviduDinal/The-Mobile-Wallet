@@ -1,11 +1,12 @@
-import { ClerkProvider } from '@clerk/clerk-expo'
-import { tokenCache } from '@clerk/clerk-expo/token-cache'
-import { Slot } from 'expo-router'
+import { Redirect, Stack } from 'expo-router'
+import { useAuth } from '@clerk/clerk-expo'
 
-export default function RootLayout() {
-  return (
-    <ClerkProvider tokenCache={tokenCache}>
-      <Slot />
-    </ClerkProvider>
-  )
+export default function AuthRoutesLayout() {
+  const { isSignedIn } = useAuth()
+
+  if (isSignedIn) {
+    return <Redirect href={'/'} />
+  }
+
+  return <Stack />
 }
